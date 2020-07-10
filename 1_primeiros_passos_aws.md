@@ -43,16 +43,16 @@ Criar instância
   - Next \ Step 5: Add Tags
   - Next 
   - Step 6: Configure Security Group
-    - Deve ficar marcada a opção: Create a new security group
-    - Nomear o "Security group name" = acesso-remoto
+    - Deve ficar marcada a opção: **Create a new security group** (se ainda não tem um grupo, se já foi criado, marcar "**Select an existing security group**")	
+    - Nomear o "**Security group name**" = acesso-remoto
 	- Description = acesso-remoto
 	- Source: My IP   (só meu IP pode acessar - cuidar se o IP for dinâmico, vai parar de funcionar... há outras formas de restringir acesso)
   - Clicar em "Review and Launch"	
   - Clicar em "Launch"
   - Criar uma chave para fazer o acesso da máquina
-    - Create a new key pair
-	- Nomear "Key pair name" = aws-marcia
-	- Efetuar download da chave (salvar em local seguro - se perder, não acessa mais a máquina)
+    - Selecione "**Create a new key pair**" (se ainda não tem - caso já tenha, selecione "**Choose an existing key pair**") 
+	- Nomear "Key pair name" = aws-marcia (ou selecionar a chave, caso já tenha)
+	- Se estiver criando uma nova chave, efetuar seu download (salvar em local seguro - se perder, não acessa mais a máquina)
   - Clicar em "Launch instances" (a instância será provisionada)
   
   

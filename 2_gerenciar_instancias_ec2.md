@@ -82,7 +82,7 @@ Após conectar na máquina via ssh, atualizar os pacotes:
 
 ### Autorizar a comunicação entre as máquinas:
 
-**Visualizando a regra de acesso dos Security groups **
+**Visualizando a regra de acesso dos Security groups**
 	
 	1) Acessar o EC2 Dashboards (ou Painel EC2)
 	
@@ -142,7 +142,11 @@ São cobrados separados
 
 Elastic Block Store \ Volumes
 
-Se a máquina estiver parada (stop), ainda está consumindo disco (EBS), logo contabilizará para os limites da conta free e se exceder, será cobrado
+Se a máquina estiver parada (stop), ainda está consumindo disco (EBS), logo contabilizará para os **limites da conta free e se exceder, será cobrado**.
+
+Pode acontecer de ter "n" máquinas paradas (stop) como no exemplo do print da painel EC2: **0 instâncias em execução**, **2 volumes**.
+
+<img src="./img/painel_ec2_stop_instances.png">
 
 [Calculadora estimativa de preço -  SIMPLE MONTHLY CALCULATOR](https://calculator.s3.amazonaws.com/index.html)
 

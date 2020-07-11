@@ -22,22 +22,20 @@ Ao clicar em "Launch instance", selecionar "AWS Marketplace"
   
   2) Selecionar imagem e dar next até chegar a tela "Step 3: Configure Instance Details"
   
-	2.1) Enable termination protection: MARCAR (não permite dar um destroy na máquina)
+      2.1) Enable termination protection: MARCAR (não permite dar um destroy na máquina)
 	
-	2.2) User data: colar o conteúdo do arquivo script.sh	
+      2.2) User data: colar o conteúdo do arquivo script.sh	
 	
-	2.3) Next até a tela "Step 6: Configure Security Group"
+      2.3) Next até a tela "Step 6: Configure Security Group"
 	
-	  - Definir o grupo de acesso
+	    - Definir o grupo de acesso
 	  
-	  - Next...
+	    - Next...
 	  
-	2.4) Selecionar a chave no passo "Step 7: Review Instance"	
+      2.4) Selecionar a chave no passo "Step 7: Review Instance"	
 	
 	
-**script.sh**
-
-Obs.: Não precisa colocar **sudo** pois o script será executado como root
+**script.sh** (não precisa colocar **sudo** em nenhum comando, pois o script será executado como root)
 
 ```shell
 
@@ -106,11 +104,14 @@ Verificar permissão para o usuário (ec2-user) e o grupo (apache):
 	Description: acesso-web
 	
 	Inbound (inserir duas roles)
+	
 		Type: HTTP  | Origem: Qualquer lugar 0.0.0.0/0,::/0
+		
 		Type: HTTPS | Origem: Qualquer lugar 0.0.0.0/0,::/0
+		
 		--> IPv4 e IPv6: 0.0.0.0/0,::/0
 	
-	Criar grupo de segurança		
+	Clicar em "Criar grupo de segurança"
 	
 	Nomear na lista de Security Group: acesso-web
 	

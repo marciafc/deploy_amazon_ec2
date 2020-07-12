@@ -10,7 +10,7 @@
 
 ## Instância para o banco de dados
 
-**RDS** ([Relational Database Service](https://aws.amazon.com/pt/rds) é gratuito por 12 meses se for do tipo t2.micro
+**RDS** ([Relational Database Service](https://aws.amazon.com/pt/rds)) é gratuito por 12 meses se for do tipo t2.micro
 
 Preparar uma máquina já com o mysql
 

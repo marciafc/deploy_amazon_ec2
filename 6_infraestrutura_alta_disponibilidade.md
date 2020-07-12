@@ -10,7 +10,7 @@ Como a instância no EC2 foi criada com o banco de dados, e agora temos o banco 
   
   - O banco ficará apenas no RDS
 
-	Conectado na máquina em EC2 e verificando o banco na porta 3306:
+Conectado na máquina em EC2 e verificando o banco na porta 3306:
 	
 	$ netstat -ltun  
 
@@ -23,6 +23,7 @@ Como a instância no EC2 foi criada com o banco de dados, e agora temos o banco 
 
 1) Preparar a máquina
 
+```
 	# Parar o banco
 	$ sudo systemctl stop mariadb
 
@@ -38,7 +39,8 @@ Como a instância no EC2 foi criada com o banco de dados, e agora temos o banco 
 	$ mkdir cadastro
 	$ cd cadastro
 	$ vi dbinfo.cadastro
-	# colar o conteúdo abaixo dentro do arquivo dbinfo.cadastro:
+	# Colar o conteúdo abaixo dentro do arquivo dbinfo.cadastro:
+```
 
 ```php	
 
@@ -52,6 +54,7 @@ define('DB_DATABASE', 'cadastro');
 ?>
 ```
 
+```
 	$ ls -l
 	total 4
 	-rw-rw-r-- 1 ec2-user ec2-user 190 jul 12 06:31 dbinfo.cadastro
@@ -60,7 +63,9 @@ define('DB_DATABASE', 'cadastro');
 	$ cd ..
 	$ cd html
 	$ vi index.php
-	# colar o conteúdo dentro do arquivo index.php:
+	# Colar o conteúdo dentro do arquivo index.php:
+	
+```	
 	
 ```php
 <?php include "../cadastro/dbinfo.cadastro"; ?>
@@ -185,10 +190,12 @@ function TableExists($tableName, $connection, $dbName) {
 ?> 
 ```
 
+```
 	$ ls -l
 	total 4
 	-rw-rw-r-- 1 ec2-user ec2-user 3064 jul 12 06:39 index.php                	
-	
+```
+
 2) Testar se a aplicação (EC2) está rodando ok
 
   - Acessar no navegador com o ip público (deve visualizar a página index.php)
@@ -197,6 +204,7 @@ function TableExists($tableName, $connection, $dbName) {
   
 3) Dando sequência, após salvar a página index.php...
 
+```
 	# Deixar conteúdo da pasta www/ no padrão usuário 'ec2-user' e grupo 'apache'
 	$ cd ..
 	$ cd ..
@@ -214,9 +222,10 @@ function TableExists($tableName, $connection, $dbName) {
 	# agora está com usuário 'ec2-user' e grupo 'apache'
 	$ ls -l
 	-rw-rw-r-- 1 ec2-user apache 3064 jul 12 06:39 index.php
-	
+```
+
 4) Pausar a instância que será gerada a imagem	
-	sudo shutdown -h now
+	$ sudo shutdown -h now
 
 5) Cria a imagem
 

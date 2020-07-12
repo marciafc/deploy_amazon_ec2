@@ -47,6 +47,9 @@ Feito! Está na máquina da Amazon
 
 	[ec2-user@ip-888-88-88-888 ~]   = ec2-user é o usuário | ip-888-88-88-888 é parte do DNS privado | 888-88-88-888 é o IP privado
 
+### Resolução de problemas para conectar-se à instância
+
+[Troubleshooting](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html)
 
 ## Gerenciar as instâncias Amazon Linux
 

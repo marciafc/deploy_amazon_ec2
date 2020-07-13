@@ -12,11 +12,11 @@ Custo: [Definição de preço do Elastic Load Balancing](https://aws.amazon.com/
  
 ## Load Balancing
 
-<img src="./diagrama_load_balancing.png">
+<img src="./img/diagrama_load_balancing.png">
 
-1) Parar a instância criada anteriormente ("webCadastro")
+**1) Parar a instância** criada anteriormente ("webCadastro")
 
-2) Criar o Load Balancer
+**2) Criar o Load Balancer**
 
 Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Balancer HTTP HTTPS (clicar em "Create") 
 
@@ -40,7 +40,7 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
 	
 	- Next
 
-  - Step 3: Configure Security Groups
+  - No "Step 3: Configure Security Groups"
   
     - Criar um security group específico para o load balancer (marcar opção "Create a new security group")
 	  
@@ -50,7 +50,7 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
 	  
 	  - Next
 
-  - Step 4: Configure Routing
+  - No "Step 4: Configure Routing"
   
     - target group (onde o load balancing olha - são as intâncias que precisam estar agrupadas)
 	  
@@ -72,7 +72,7 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
 	  
 	  - Next
 	  
-  - Step 5: Register Targets (associar o **grupo do auto scaling** e esse grupo que irá gerenciar as instâncias)
+  - No "Step 5: Register Targets" (associar o **grupo do auto scaling** e esse grupo que irá gerenciar as instâncias)
 
     - Irá apontar o serviço que irá escalar as máquinas, não para uma instância específica
 	
@@ -84,7 +84,7 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
   
     - Create
 	
-3)	Configurar o Auto Scaling Group
+**3) Configurar o Auto Scaling Group**
 
 Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balancers), segue...
 
@@ -113,7 +113,7 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
 	
 	- Tela "Create Auto Scaling Group"
 	  - Group Name: as-group-cadastroWeb
-	  - Newtwork: a VPC default
+	  - Newtwork: deixar a VPC default (é a que está sendo utilizada)
 	  - Group size: 2 (começa com duas máquinas, por exemplo)
 	  - Subnet: as mesmas subnets selecionadas quando criou o load balancer no campo "Availability Zones" 
 	    - Tem que ser as subredes que fazem parte do grupo
@@ -131,14 +131,12 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
 	  
 	- Next \ Next \ Next
 	
-**Pontos de atenção**
+**Sobre criação do grupo de auto scaling é necessário:** 
 
- - Para criação do grupo de auto scaling é necessário:
- 
    - Antes da criação do grupo de auto scaling, criar um template de configuração (launch config)
    - Configurar pelo menos duas sub-redes que devem coincidir com o **ELB**
    
-4) Testar o ambiente de produção
+**4) Testar o ambiente de produção**
 
   - Na listagem de grupos de auto scalling ("Auto Scaling \ Auto Scaling Groups"), selecionar o grupo criado ("as-group-cadastroWeb")
     - Na aba "Instances" serão listadas "x" instâncias (o número de instância configuradas na imagem) e para cada, como está seu status (Health Status)
@@ -147,21 +145,22 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
  - O ip de chegada não é mais o da instância, mas sim o do load balancer
    - Load Balancing \ Load Balancer
    - Selecionar o load balancer na listagem, obter o "DNS name" na aba "Description" (abrir este no navegador para testar)
-     - O load balancer neste momento está mandando para uma das instâncias criadas
+     - O load balancer neste momento está mandando cada requisição para uma das instâncias criadas
 	 - Inserir algum registro para verificar se está salvando no RDS
+	 
 	- Ir no Dashboard do EC2 (Instâncias em execução), terminar uma das instâncias, e na sequência recarregar a página no navegador
 	  - Verificar se outra instância foi criada(quem gerencia isso é o grupo do auto scaling)
 	  
-**Checks possíveis de serem configurados no grupo de auto scaling:
+**Checks possíveis de serem configurados no grupo de auto scaling:**
 
  - EC2 (estado da instância EC2): stopping, terminated, etc...
  - ELB (teste da aplicação: porta 80 (HTTP) está respondendo?
 
-5) Configurando domínio e políticas de auto scaling
+**5) Configurando domínio e políticas de auto scaling**
 
-**Domínio**
+**Domínio:**
 
-  - Associar um nome ao DNS name do load balancer
+  - Associar um nome ao "DNS name" do load balancer
   
   - Criar conta no [Freenom](https://www.freenom.com/pt/index.html)
     - Criar domínio
@@ -173,9 +172,9 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
 	  
 	- Testar no navegador ou linha de comando
 	
-	$ dig http://cadastro.usuario.webredirect.org
+		$ dig http://cadastro.usuario.webredirect.org
 	  
-**Políticas de auto scaling**
+**Políticas de auto scaling:**
 
 Auto Scaling \ Auto Scaling Groups \ Selecionar o grupo de auto scaling ("as-group-cadastroWeb") \ Scaling Policies \ Add policy
 
@@ -184,11 +183,11 @@ Criar política para que quando a utilização de CPU chegar a 60%, suba uma nov
   - Name: CPU
   - Metric type: Average CPU Utilization
   - Target Value: 60
-  - Instances need: 60 segundos to warm up after scaling (para teste, pode aumentar este valor)
+  - Instances need: 60 segundos to warm up after scaling (valor para teste)
   
 Também baixa a instância se tiver abaixo de 60% de CPU
 
 Não esquecer de ajustar em Actions \ Edit \ Max (**aumentar o máximo de instâncias**) 
 
 Exemplo de cenário: Min: 2, Max: 6 
-  - Se houver uma carga maior (como uma Black Friday), ocorrerá a política de "CPU" cadastrada e serão alocadas dinamicamente mais máquinas
+  - Se houver uma carga maior (ex. Black Friday), ocorrerá política de "CPU" e serão alocadas dinamicamente mais máquinas (até 6 instâncias)

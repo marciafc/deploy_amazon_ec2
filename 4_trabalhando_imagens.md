@@ -27,6 +27,8 @@ A imagem criada será listada em Images \ AMIs \ Owned by me
    - Acessar no navegador pelo IPv4 Public IP
    
 ## IP dedicado   
+ 
+**EIP** (Endereço IP elástico) 
   
 Rede e segurança \ Elastic IPs \ Alocar endereço IP elástico \ Conjunto de endereços IPv4 da Amazon \ Alocar
 
@@ -34,11 +36,11 @@ Agora o endereço está disponível, mas ainda não está associado à máquina
 
 Em Ações \ Associar endereço IP elástico \ Marcar "Instância" \ Selecionar a instância em "Instância" (pode ser uma instância parada ou running) \ Associar
 
-**Sem custo**: Se a máquina estiver rodando, tem direito a UM IP estático associado
+**Sem custo**: Se a máquina estiver rodando, tem direito a UM IP estático associado por instância
 
 Se tiver por exemplo, 4 IPs estáticos associados a uma única instância: primeiro IP não é cobrado e os demais sim
 
-Se a máquina estiver parada: conta para ser cobrado pelo IP estático
+Se a máquina for encerrada: conta para ser cobrado pelo IP estático alocado
 
 "*Quando não precisar mais de um endereço IP elástico, é recomendável liberá-lo (o endereço não deve estar associado a uma instância).* 
 

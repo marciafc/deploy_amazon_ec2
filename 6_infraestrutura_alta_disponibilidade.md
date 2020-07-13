@@ -225,6 +225,7 @@ function TableExists($tableName, $connection, $dbName) {
 ```
 
 4) Pausar a instância que será gerada a imagem	
+
 	$ sudo shutdown -h now
 
 5) Cria a imagem
@@ -244,6 +245,7 @@ function TableExists($tableName, $connection, $dbName) {
     - Nos passos de criação, incluir security group para acesso remoto (ssh), web (para o apache) e default (para acessar o RDS)
 	
   - Após ser criada, nomea-la
-    - Pode excluir a anterior (que deu origem a esta)
+    - webCadastro
+    - Pode excluir a anterior (que deu origem a esta)	  
 	
   - Testar no navegador acessando com o ip público, se carrega ok a página de acesso ao banco de dados (index.php)	

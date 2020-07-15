@@ -32,7 +32,7 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
 	
 	- HTTPS 443
 	
-  - VPC (rede dentro da AWS)
+  - VPC (rede dentro da AWS - default)
   
   - Availability Zones (tudo será feito dentro dessas zonas de disponibilidade)
     
@@ -44,9 +44,9 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
   
     - Criar um security group específico para o load balancer (marcar opção "Create a new security group")
 	  
-	  - lb-acesso-web
+	  - Security group name: lb-acesso-web
 	  
-	  - definir types HTTP e HTTPS
+	  - definir types: HTTP na porta 80 | HTTPS na 443
 	  
 	  - Next
 
@@ -55,20 +55,22 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
     - target group (onde o load balancing olha - são as intâncias que precisam estar agrupadas)
 	  
 	  - Name: tg-cadastroWeb
+	  
+	  - Marcar: Instance
 	 
-  - Heath check: check se o root traz alguma resposta
+      - Heath check (check se o root traz alguma resposta)
     
-	- Advanced health check settings
+	  - Advanced health check settings
 	
-	  - Health threshold: 5 (número de tentativas de check que considera para alterar o status de uma máquina para OK)
+	    - Health threshold: 5 (número de tentativas de check que considera para alterar o status de uma máquina para OK)
 	  
-	  - Unhealth threshold: 5 (número de tentativas de check que considera para alterar o status de uma máquina para NOK)
+	    - Unhealth threshold: 5 (número de tentativas de check que considera para alterar o status de uma máquina para NOK)
 	  
-	  - Timeout: 5 segundos (limite para aguardar resposta do check, se não responder, vai considerar como falha)
+	    - Timeout: 5 segundos (limite para aguardar resposta do check, se não responder, vai considerar como falha)
 	  
-	  - Interval: 30 segundos (intervalo que faz o check da instância)
+	    - Interval: 30 segundos (intervalo que faz o check da instância)
 	  
-	  - Success code: 200 (se retonar 200, considera OK)
+	    - Success code: 200 (se retonar 200, considera OK)
 	  
 	  - Next
 	  
@@ -86,50 +88,49 @@ Em Load Balancing \ Load Balancers \ Create Load Balancer \ Application Load Bal
 	
 **3) Configurar o Auto Scaling Group**
 
+[Amazon EC2 Auto Scaling ajuda a manter a disponibilidade de seus aplicativos](https://console.aws.amazon.com/ec2autoscaling)
+
+Amazon **CloudWatch**: habilitar **políticas de escalabilidade** e **monitorar métricas** para seus grupos de **Auto Scaling** e **instâncias EC2**.
+
 Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balancers), segue...
 
   - Em Auto Scaling \ Launch Configuration (**primeiro criar setup do auto scaling, para depois lança-lo**)
-  
-    - Clicar em "Create launch configuration"\ My AMIs \ Selecionar imagem criada anteriormente ("webCadastro")
-    
-	- Em "Create Launch Configuration", nomear o setup
-	  - Name: as-config-webCadastro
-	  - Next
-	  
-	- Next  
+      
+	- Nomear o setup
+	  - Name: as-config-webCadastro	  	  
+      - Selecionar imagem criada anteriormente ("webCadastro") 		
+	  - Tipo de instância: t2.nano
+	  - Selecionar os security group já existente de acesso-remoto (ssh), acesso-web (Apache) e "default" para comunicar com RDS na mesma rede	  
+	  		  
+	- Selecionar chave
 	
-	- Tela "Create Launch Configuration"
-	  - Selecionar os security group já existente de acesso-remoto (ssh), acesso-web (Apache) e "default" para comunicar com RDS na mesma rede
-	  
-	- Next  \ Criar launch configuration
-	
-	- Selecionar chave \ Next \ Next
+	- Clicar em "Criar launch configuration"		
 		  
   - Em Auto Scaling \ Auto Scaling Groups \ clicar em "Create Auto Scaling Group" (**agora sim, criar o grupo do auto scaling**)
-  
-    - Selecionar "Launch Configuration"
+      
+	- Group Name: as-group-cadastroWeb
 	
-	- Marcar o as-config-webCadastro (é o setup do auto scaling criado no passo anterior) \ Next
+	- No "Modelo de execução", marcar "as-config-webCadastro" (é o setup do auto scaling criado no passo anterior) \ Next
 	
-	- Tela "Create Auto Scaling Group"
-	  - Group Name: as-group-cadastroWeb
-	  - Newtwork: deixar a VPC default (é a que está sendo utilizada)
-	  - Group size: 2 (começa com duas máquinas, por exemplo)
+	- Tela "Definir configurações"	\ Rede
+	  - VPC: deixar a VPC default (é a que está sendo utilizada)
 	  - Subnet: as mesmas subnets selecionadas quando criou o load balancer no campo "Availability Zones" 
 	    - Tem que ser as subredes que fazem parte do grupo
+	 - Next					
 		
-	- Advanced Details
-	  - Marcar "Receive traffic from one or more load balancers" (caso não marque, só deixa marcar as instâncias)
-	  - Em "Target Groups", selecionar tg-cadastroWeb (criado no passo "Step 4: Configure Routing" - quando definiu o grupo do load balancer)
+	- Tela "Balanceamento de carga - opcional"
+	  - Marcar "Habilitar balanceamento de carga"
+	    - Application Load Balancer ou Network Load Balancer
+	  - Em "Escolher um grupo de destino para seu load balancer": selecionar tg-cadastroWeb (criado no passo "Step 4" - ao definir o grupo do load balancer)
 	  - Health Check Type: Marcar "ELB" (Elastic Load Balance).
 	    - A opção "EC2" testa a integridade da instância, se está running, stopping, se está ligando/desligando
 	    - Health Check Grace Period: para fins de teste, pode alterar para 30 segundos 	
 		- Next
 	
-	- Create Auto Scaling Group
-	  - Marcar "Keep this group at its initial size" (manter o size inicial configurado no grupo) \ Next
-	  
-	- Next \ Next \ Next
+	- Tamanho do grupo - opcional
+	  - Informar as capacidades (desejada, mínima, máxima) de instâncias
+      - Next \ Next \ Next \ Criar o grupo de Auto Scaling	 
+	    - Vai subir as instâncias
 	
 **Sobre criação do grupo de auto scaling é necessário:** 
 
@@ -139,8 +140,8 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
 **4) Testar o ambiente de produção**
 
   - Na listagem de grupos de auto scalling ("Auto Scaling \ Auto Scaling Groups"), selecionar o grupo criado ("as-group-cadastroWeb")
-    - Na aba "Instances" serão listadas "x" instâncias (o número de instância configuradas na imagem) e para cada, como está seu status (Health Status)
-	- Na aba "Monitoring" é possível acompanhar o monitoramento das máquinas
+    - Na aba "Gerenciamento de Instâncias" serão listadas "x" instâncias (o número de instância configuradas na imagem) e para cada, como está seu status (Health Status)
+	- Na aba "Monitoramento" é possível acompanhar o monitoramento das máquinas
 	
  - O ip de chegada não é mais o da instância, mas sim o do load balancer
    - Load Balancing \ Load Balancer
@@ -158,7 +159,7 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
 
 **5) Configurando domínio e políticas de auto scaling**
 
-**Domínio:**
+Domínio:
 
   - Associar um nome ao "DNS name" do load balancer
   
@@ -174,16 +175,16 @@ Assim que o load balancer estiver criado (aparece em Load Balancing \ Load Balan
 	
 		$ dig http://cadastro.usuario.webredirect.org
 	  
-**Políticas de auto scaling:**
+Políticas de auto scaling:
 
-Auto Scaling \ Auto Scaling Groups \ Selecionar o grupo de auto scaling ("as-group-cadastroWeb") \ Scaling Policies \ Add policy
+  - Auto Scaling \ Auto Scaling Groups \ Selecionar o grupo de auto scaling ("as-group-cadastroWeb") \ Escalabilidade automática \ Adicionar política
 
-Criar política para que quando a utilização de CPU chegar a 60%, suba uma nova instância
+  - Criar política para que quando a utilização de CPU chegar a 60%, suba uma nova instância
 
-  - Name: CPU
-  - Metric type: Average CPU Utilization
-  - Target Value: 60
-  - Instances need: 60 segundos to warm up after scaling (valor para teste)
+    - Name: CPU
+    - Metric type: Average CPU Utilization
+    - Target Value: 60
+    - Instances need: 60 segundos to warm up after scaling (valor de 60 seg para teste)
   
 Também baixa a instância se tiver abaixo de 60% de CPU
 

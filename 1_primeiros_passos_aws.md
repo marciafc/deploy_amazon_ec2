@@ -9,13 +9,19 @@ Preço do Amazon EC2 - [ler](https://aws.amazon.com/pt/ec2/pricing/on-demand/)
 
 Console [AWS](https://console.aws.amazon.com/console)
 
-Segundo fator de autenticação
+## Dicas de segurança e controle de gastos
+
+- Segundo fator de autenticação
   - Acessar [IAM](https://console.aws.amazon.com/iam/home)
   - Habilitar MFA em sua conta raiz \ Gerenciar MFA
   - Autenticação multifator (MFA) \ Ativar MFA 
   - Marcar "Dispositivo MFA virtual"
   - Instalar no smartphone um dos apps aceitos (por exemplo, Google Authenticator)
   - Escanear o QRCode e adicionar os códigos gerados pelo app
+  
+- [Alertas de uso do nível gratuito usando o Orçamentos da AWS](https://docs.aws.amazon.com/pt_br/awsaccountbilling/latest/aboutv2/tracking-free-tier-usage.html#free-budget)
+
+- [Criando um Alarme de custos na AWS](https://www.youtube.com/watch?v=s4i8CP8SeuA&feature=youtu.be)
   
 ## Criando a primeira instância EC2
 
